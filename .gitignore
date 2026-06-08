@@ -1,0 +1,17 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editor
+.vscode/
+
+# Temp / Excel locks
+~$*.xlsx
+*.tmp
+
+# Raw client data — not published
+data/raw/
