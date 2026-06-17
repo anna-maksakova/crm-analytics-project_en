@@ -1,36 +1,36 @@
 """
-Theme: цвета, шрифты, общие стили для дашборда.
+Theme: colors, fonts, shared styles for the dashboard.
 """
 
-# === Цветовая палитра — синяя градация, без тёплых акцентов ===
-# Контраст создаётся через светлоту, а не через цвет.
-BLUE_DARK = "#2F5268"     # основной — текст, основные элементы, акцент через тёмность
-BLUE_MID = "#5F8FA8"      # вторичный — линии, второй ряд данных, выделение
-BLUE_SOFT = "#9FC3D5"     # светлый — заливка, мягкие элементы
-BLUE_PALE = "#D9EAF2"     # очень светлый — сетка, фон карточек
-BLUE_BG = "#F3F7FA"       # фон-подложка
+# === Color palette — blue gradations, no warm accents ===
+# Contrast comes from lightness, not hue.
+BLUE_DARK = "#2F5268"     # primary — text, main elements, accent through darkness
+BLUE_MID = "#5F8FA8"      # secondary — lines, second data series, emphasis
+BLUE_SOFT = "#9FC3D5"     # light — fills, soft elements
+BLUE_PALE = "#D9EAF2"     # very light — grid, card background
+BLUE_BG = "#F3F7FA"       # background base
 
 GRAY_BORDER = "#E5E5E5"
 
-# Алиасы для обратной совместимости с уже написанным кодом
-# (чтобы не менять impotrs в app.py и tabs/*)
-NAVY = BLUE_DARK          # везде где был "тёмный navy" → теперь самый тёмный синий
-NAVY_SOFT = BLUE_MID      # вторичный
-CORAL = BLUE_DARK         # бывший акцент → тоже тёмный синий (по выбору Анны: без тёплого акцента)
-SAND = BLUE_SOFT          # бывший тёплый акцент → светло-голубой
-TEAL_SOFT = BLUE_PALE     # дополнительный → бледно-голубой
+# aliases for backward compatibility with already-written code
+# (so we don't have to change imports in app.py and tabs/*)
+NAVY = BLUE_DARK          # everywhere "dark navy" was used → now the darkest blue
+NAVY_SOFT = BLUE_MID      # secondary
+CORAL = BLUE_DARK         # former accent → also dark blue (chosen: no warm accent)
+SAND = BLUE_SOFT          # former warm accent → light blue
+TEAL_SOFT = BLUE_PALE     # additional → pale blue
 
-# Палитра для категориальных данных (Source и т.п.)
+# Palette for categorical data (Source, etc.)
 PALETTE = [BLUE_DARK, BLUE_MID, BLUE_SOFT, BLUE_PALE, "#7AA5BC", "#446F87", "#B4D4E2", "#1F3A4A"]
 
-# Цвета для воронки Stage Group — градация тёмный → светлый
+# Funnel colors for Stage Group — gradation dark → light
 STAGE_COLORS = {
     "Lost": BLUE_DARK,
     "In Progress": BLUE_MID,
-    "Won": BLUE_SOFT,   # Won — самый светлый, привлекает внимание контрастом
+    "Won": BLUE_SOFT,  # Won — lightest
 }
 
-# === Шрифты и размеры ===
+# === Fonts and sizes ===
 FONT_FAMILY = 'Calibri, Inter, "Segoe UI", Tahoma, sans-serif'
 
 FONT_SIZE_BASE = 14
@@ -65,6 +65,6 @@ PLOTLY_LAYOUT = {
 
 
 def apply_theme(fig):
-    """Применить тему к plotly-фигуре."""
+    """Apply theme to a plotly figure."""
     fig.update_layout(**PLOTLY_LAYOUT)
     return fig

@@ -1,11 +1,11 @@
 """
 CRM Analytics Dashboard.
-Структура: глобальные фильтры → KPI-карточки → 3 таба.
+Structure: global filters → KPI cards → 3 tabs.
 
-Запуск локально:
+Run locally:
     python app.py
 
-Деплой на Render: см. README.md
+Deploy to Render: see README.md
 """
 import dash
 from dash import dcc, html, Input, Output, State, callback
@@ -16,23 +16,23 @@ from data_loader import load_deals, filter_deals
 from theme import CORAL, NAVY, NAVY_SOFT, FONT_FAMILY, FONT_SIZE_KPI_LABEL, FONT_SIZE_KPI_VALUE
 from tabs import funnel, managers, products
 
-# === Инициализация ===
+# === Initialization ===
 app = dash.Dash(
     __name__,
     external_stylesheets=[
         dbc.themes.FLATLY,
-        # Inter как fallback к Calibri для не-Windows систем (деплой)
+        # Inter as fallback to Calibri for non-Windows systems (deploy)
         "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
     ],
     title="CRM Analytics — Online IT School",
     suppress_callback_exceptions=True,
 )
-server = app.server  # для gunicorn на Render
+server = app.server  # for gunicorn on Render
 
-# Загружаем данные один раз при старте
+# Load data once at startup
 deals = load_deals()
 
-# === Опции для фильтров ===
+# === Filter options ===
 SOURCE_OPTIONS = [{"label": s, "value": s} for s in sorted(deals["Source"].dropna().unique())]
 EXCLUDED_PRODUCTS = ["Data Analytics", "Find yourself in IT"]
 PRODUCT_OPTIONS = [
@@ -44,9 +44,9 @@ MIN_DATE = deals["Created Time"].min().date()
 MAX_DATE = deals["Created Time"].max().date()
 
 
-# === Компоненты ===
+# === Components ===
 def header():
-    """Шапка с заголовком."""
+    """Header with title."""
     return dbc.Container([
         html.H2(
             "CRM Analytics — Online IT School",
@@ -64,7 +64,7 @@ def header():
 
 
 def filters_panel():
-    """Глобальные фильтры: Period (с Reset) → Product → Source."""
+    """Global filters: Period (with Reset) → Product → Source."""
     return dbc.Card([
         dbc.CardBody([
             dbc.Row([
@@ -116,7 +116,7 @@ def filters_panel():
 
 
 def kpi_card(title, value_id, color=NAVY):
-    """Одна KPI-карточка."""
+    """A single KPI card."""
     return dbc.Card([
         dbc.CardBody([
             html.P(
@@ -139,7 +139,7 @@ def kpi_card(title, value_id, color=NAVY):
 
 
 def kpi_row():
-    """Ряд KPI-карточек."""
+    """Row of KPI cards."""
     return dbc.Row([
         dbc.Col(kpi_card("Total Leads", "kpi-leads"), md=2),
         dbc.Col(kpi_card("Won Confirmed", "kpi-won", CORAL), md=2),
@@ -149,7 +149,7 @@ def kpi_row():
     ], style={"marginBottom": "20px"})
 
 
-# === Лейаут ===
+# === Layout ===
 app.layout = dbc.Container([
     header(),
     filters_panel(),
@@ -169,7 +169,7 @@ app.layout = dbc.Container([
 })
 
 
-# === Колбэк Reset даты ===
+# === Date reset callback ===
 @callback(
     Output("filter-date", "start_date"),
     Output("filter-date", "end_date"),
@@ -180,7 +180,7 @@ def reset_date(_n):
     return MIN_DATE, MAX_DATE
 
 
-# === Колбэк KPI — обновляется при изменении фильтров ===
+# === KPI callback — updates when filters change ===
 @callback(
     Output("kpi-leads", "children"),
     Output("kpi-won", "children"),
@@ -199,10 +199,10 @@ def update_kpi(start_date, end_date, sources, products_filter):
     won = int(df["is_won_confirmed"].sum())
     revenue = df.loc[df["is_won_confirmed"], "revenue_actual"].sum()
 
-    # Conversion Rate = Won / Total Leads (по запросу Анны: проще объяснять)
+    # Conversion Rate = Won / Total Leads
     cr = won / leads * 100 if leads > 0 else 0
 
-    # AOV (мес.) = средний aov_i по Won
+    # AOV (monthly) = mean aov_i over Won
     aov_series = df.loc[df["is_won_confirmed"], "aov_i"]
     aov = aov_series.mean() if len(aov_series) > 0 else 0
 

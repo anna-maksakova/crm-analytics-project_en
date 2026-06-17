@@ -59,7 +59,7 @@ def update_products_tab(start_date, end_date, sources, products, metric):
     df = filter_deals(deals, (start_date, end_date), sources, products)
 
     # --- 1. Heatmap Product × Education Type ---
-    # Только основные продукты (DM, UX/UI, WD), как в анализе
+    # Main products only (DM, UX/UI, WD), as in the analysis
     main_mask = df["is_main_product"] if "is_main_product" in df.columns else df["Product"].isin(
         ["Digital Marketing", "UX/UI Design", "Web Developer"]
     )
@@ -80,21 +80,21 @@ def update_products_tab(start_date, end_date, sources, products, metric):
     col, title_metric, fmt = metric_config[metric]
 
     pivot = grouped.pivot(index="Product", columns="Education Type", values=col).fillna(0)
-    # Стабильный порядок
+    # Stable order
     desired_products = [p for p in ["Digital Marketing", "UX/UI Design", "Web Developer"] if p in pivot.index]
     pivot = pivot.loc[desired_products]
 
     text_template = pivot.map(lambda v: f"{v:{fmt}}".replace(",", " "))
 
-    # Цветовая шкала: очень светлый голубой → тёмно-синий
+    # Color scale: very light blue → dark blue
     heatmap_colorscale = [
         [0, "#F3F7FA"],
         [0.5, "#9FC3D5"],
         [1, "#2F5268"],
     ]
 
-    # Цвет текста: белый на тёмных ячейках, тёмно-синий на светлых
-    # Порог — 60% от максимума (выше — тёмная ячейка, нужен белый текст)
+    # Text color: white on dark cells, dark blue on light ones
+    # Threshold — 60% of max (above it the cell is dark, needs white text)
     vmax = pivot.values.max() if pivot.values.size > 0 else 1
     threshold = vmax * 0.6
     text_colors = [
@@ -114,12 +114,12 @@ def update_products_tab(start_date, end_date, sources, products, metric):
         colorbar=dict(title=title_metric, tickfont=dict(size=12)),
     ))
 
-    # Plotly Heatmap не поддерживает per-cell цвет текста напрямую через textfont.
-    # Используем go.Heatmap.update_traces + аннотации поверх для тёмных ячеек.
-    # Проще: проходим аннотациями, перекрывая текст с правильным цветом.
-    fig_heat.update_traces(textfont=dict(size=15, color="#2F5268"))  # базовый цвет
+    # Plotly Heatmap doesn't support per-cell text color directly via textfont.
+    # We use go.Heatmap.update_traces + annotations on top for dark cells.
+    # Simpler: pass over with annotations, overriding text with the correct color.
+    fig_heat.update_traces(textfont=dict(size=15, color="#2F5268"))  # base color
 
-    # Аннотации с белым текстом для тёмных ячеек
+   # Annotations with white text for dark cells
     for i, product in enumerate(pivot.index):
         for j, edu in enumerate(pivot.columns):
             if pivot.values[i, j] > threshold:
@@ -141,12 +141,12 @@ def update_products_tab(start_date, end_date, sources, products, metric):
     won_df = df[df["is_won_confirmed"]]
     payment_counts = won_df["Payment Type"].value_counts()
 
-        # Явные цвета по типу платежа (а не по позиции в палитре)
+        # Explicit colors by payment type (not by palette position)
     payment_color_map = {
-        "Recurring Payments": "#9FC3D5",   # светло-голубой
-        "One Payment": "#2F5268",          # тёмный
-        "Reservation": "#5F8FA8",          # средний
-        "Free Education": "#D9EAF2",       # самый светлый
+        "Recurring Payments": "#9FC3D5",   # light blue
+        "One Payment": "#2F5268",          # dark
+        "Reservation": "#5F8FA8",          # mid
+        "Free Education": "#D9EAF2",       # lightest
     }
     pie_colors = [payment_color_map.get(label, "#5F8FA8") for label in payment_counts.index]
 

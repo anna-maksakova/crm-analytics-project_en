@@ -1,6 +1,6 @@
 """
-Загрузка данных из parquet.
-Кеш через functools.lru_cache — данные читаются один раз при старте.
+Load data from parquet.
+Cache via functools.lru_cache — data is read once at startup.
 """
 from functools import lru_cache
 from pathlib import Path
@@ -11,7 +11,7 @@ DATA_DIR = Path(__file__).parent.parent / "data" / "processed"
 
 @lru_cache(maxsize=1)
 def load_deals() -> pd.DataFrame:
-    """Очищенные сделки. Кешируется при первом вызове."""
+    """Cleaned deals. Cached on first call."""
     return pd.read_parquet(DATA_DIR / "deals_clean.parquet")
 
 
@@ -31,9 +31,9 @@ def filter_deals(
     sources: list | None = None,
     products: list | None = None,
 ) -> pd.DataFrame:
-    """Применить глобальные фильтры к Deals.
+    """Apply global filters to Deals.
 
-    Используется во всех табах. Пустой список или None = без фильтра.
+    Used across all tabs. Empty list or None = no filter.
     """
     df = deals
     if date_range and date_range[0] and date_range[1]:
