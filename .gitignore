@@ -15,3 +15,5 @@ __pycache__/
 
 # Raw client data — not published
 data/raw/
+
+data/processed/*.xlsx
