@@ -11,7 +11,7 @@ End-to-end analytics of a CRM dataset for an online programming school: data cle
 
 ## 🔗 Live Dashboard
 
-**[View the interactive dashboard →](DASHBOARD_URL_PLACEHOLDER)**
+**[View the interactive dashboard →](https://crm-analytics-dashboard-wr1f.onrender.com)**
 
 > Hosted on a free tier — the first load may take ~30–50 seconds to wake the service.
 
