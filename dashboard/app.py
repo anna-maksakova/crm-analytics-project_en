@@ -155,9 +155,15 @@ app.layout = dbc.Container([
     filters_panel(),
     kpi_row(),
     dbc.Tabs([
-        dbc.Tab(funnel.layout(), label="Funnel & Channels", tab_id="tab-funnel"),
-        dbc.Tab(managers.layout(), label="Sales Managers", tab_id="tab-managers"),
-        dbc.Tab(products.layout(), label="Products & Payments", tab_id="tab-products"),
+        dbc.Tab(funnel.layout(), label="Funnel & Channels", tab_id="tab-funnel",
+                active_label_style={"color": NAVY, "fontWeight": 600},
+                label_style={"color": NAVY_SOFT}),
+        dbc.Tab(managers.layout(), label="Sales Managers", tab_id="tab-managers",
+                active_label_style={"color": NAVY, "fontWeight": 600},
+                label_style={"color": NAVY_SOFT}),
+        dbc.Tab(products.layout(), label="Products & Payments", tab_id="tab-products",
+                active_label_style={"color": NAVY, "fontWeight": 600},
+                label_style={"color": NAVY_SOFT}),
     ], id="tabs", active_tab="tab-funnel"),
     html.Div(style={"height": "30px"}),
 ], style={
