@@ -15,8 +15,7 @@ End-to-end analytics of a CRM dataset for an online programming school: data cle
 
 > Hosted on a free tier — the first load may take ~30–50 seconds to wake the service.
 
-<!-- Add screenshot here once deployed: -->
-<!-- ![Dashboard preview](assets/dashboard.png) -->
+![Dashboard demo](assets/dashboard_demo.gif)
 
 ---
 
